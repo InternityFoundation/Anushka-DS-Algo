@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node 
+{ 
+    public:
+    int data; 
+    Node* left, * right; 
+}; 
+
+Node* newNode(int data) 
+{ 
+    Node* node = (Node*)malloc(sizeof(Node)); 
+    node->data = data; 
+    node->left = node->right = NULL; 
+    return (node); 
+}
+
+Node *TraverseTree(int a[],Node *root,int i,int num )
+{
+    if(i<num)
+    {
+        Node * temp=newNode(a[i]);
+        root=temp;
+        
+        root->left=TraverseTree(a,root->left,2*i+1,num);
+        root->right=TraverseTree(a,root->right,2*i+2,num);
+    }
+    return root;
+
+}
+
+int maxCostPathSol(struct Node *root, int &r) 
+{ 
+    if (root==NULL) return 0; 
+    if (!root->left && !root->right) return root->data; 
+ 
+    int ls = maxCostPathSol(root->left, r); 
+    int rs = maxCostPathSol(root->right, r); 
+ 
+    if (root->left && root->right) 
+    {  
+        r = max(r, ls + rs + root->data); 
+  
+        return max(ls, rs) + root->data; 
+    } 
+
+    return (!root->left)? rs + root->data : ls + root->data; 
+} 
+     
+int maxCostPath(Node *root) 
+{ 
+    int res = INT_MIN; 
+    maxCostPathSol(root, res); 
+    return res; 
+} 
+
+int main()
+{
+    
+    int num;
+    cin>>num;
+    int *a;
+    a=new int[num];
+    for(int i=0;i<num;i++)
+    {
+        cin>>a[i];
+    }
+
+    Node *root=TraverseTree(a,root,0,num);
+    cout<<maxCostPath(root); 
+   
+    return 0;
+}

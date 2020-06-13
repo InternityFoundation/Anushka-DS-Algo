@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node 
+{ 
+    public:
+    int data; 
+    Node* left, * right; 
+}; 
+Node* newNode(int data) 
+{ 
+    Node* node = (Node*)malloc(sizeof(Node)); 
+    node->data = data; 
+    node->left = node->right = NULL; 
+    return (node); 
+}
+Node *TraverseTree(int a[],Node *root,int i,int num )
+{
+    if(i<num)
+    {
+        Node * temp=newNode(a[i]);
+        root=temp;
+        
+        root->left=TraverseTree(a,root->left,2*i+1,num);
+        root->right=TraverseTree(a,root->right,2*i+2,num);
+    }
+    return root;
+
+}
+
+Node * LeastCommon(Node* root, int p, int q) 
+{  
+    if (root == NULL) 
+    return NULL; 
+    if (root->data == p || root->data == q)
+     {
+        return root; 
+    }
+    Node *left  = LeastCommon(root->left, p, q); 
+    Node *right = LeastCommon(root->right, p, q);
+    if (left && right)  
+    return root; 
+
+    if(left != NULL)
+    {
+        return left;
+    }
+    else
+    {
+        return right;
+    } 
+} 
+int main()
+{
+    
+    int num;
+    int p,q;
+    int *a;
+    cin>>num;
+    a=new int[num];
+    for(int i=0;i<num;i++)
+    {
+        cin>>a[i];
+    }
+    cin>>p>>q;
+    Node *root=TraverseTree(a,root,0,num);
+    cout << LeastCommon(root, p, q)->data;
+          
+    return 0;
+}
